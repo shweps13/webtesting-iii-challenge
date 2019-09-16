@@ -1,15 +1,20 @@
 // Test away
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
+import renderer from "react-test-renderer";
 
 import Dashboard from './Dashboard';
-import { Display } from '../display/Display';
-import { Controls } from '../controls/Controls';
+
 
 test('Dashboard renders without crashing', () => {
   render(<Dashboard />);
 });
+
+test("Matches snapshot", () => {
+    const tree = renderer.create(<Dashboard />); 
+    expect(tree.toJSON()).toMatchSnapshot();
+  });
 
 test('Display element showings on Dashboard page', () => {
 
@@ -21,4 +26,12 @@ test('Controls element showings on Dashboard page', () => {
 
     const { getByTestId } = render(<Dashboard />);
     getByTestId(/controls-element/i);
+});
+
+test('Showing [open/close] when click on it', () => {
+
+    const { getByTestId, queryByText } = render(<Dashboard />);
+    queryByText(/Open/i);
+    fireEvent.click(getByTestId(/control-btn1/i));
+    queryByText(/Closed/i)
 });
