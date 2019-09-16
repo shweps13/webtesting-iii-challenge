@@ -11,7 +11,7 @@ test('Dashboard renders without crashing', () => {
   render(<Dashboard />);
 });
 
-test("Matches snapshot", () => {
+test('Matches snapshot', () => {
     const tree = renderer.create(<Dashboard />); 
     expect(tree.toJSON()).toMatchSnapshot();
   });
@@ -31,7 +31,7 @@ test('Controls element showings on Dashboard page', () => {
 test('Showing [open/close] when click on it', () => {
 
     const { getByTestId, queryByText } = render(<Dashboard />);
-    queryByText(/Open/i);
-    fireEvent.click(getByTestId(/control-btn1/i));
-    queryByText(/Closed/i)
+    expect(queryByText(/Open/i)).toBeTruthy();
+    fireEvent.click(getByTestId(/control-btn2/i));
+    expect(queryByText(/Closed/i)).toBeTruthy();
 });
