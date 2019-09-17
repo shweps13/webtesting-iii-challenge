@@ -35,3 +35,23 @@ test('Showing [open/close] when click on it', () => {
     fireEvent.click(getByTestId(/control-btn2/i));
     expect(queryByText(/Closed/i)).toBeTruthy();
 });
+
+test('Defaults to unlocked and open', () => {
+    
+    const { getByText } = render(<Dashboard />);
+    getByText(/unlocked/i);
+    getByText(/open/i);
+})
+
+test('Cannot open if locked', () => {
+
+    const { getByTestId, getByText } = render(<Dashboard />);
+
+    fireEvent.click(getByTestId(/control-btn2/i));
+    fireEvent.click(getByTestId(/control-btn1/i));
+    const inActiveOpen = getByText(/closed/i);
+    fireEvent.click(getByTestId(/control-btn2/i));
+    const checkChange = getByText(/closed/i);
+
+    expect(inActiveOpen).toBe(checkChange);
+}) 
