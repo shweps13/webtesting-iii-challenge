@@ -6,7 +6,6 @@ import renderer from "react-test-renderer";
 
 import Controls from './Controls';
 
-
 test('Dashboard renders without crashing', () => {
   render(<Controls />);
 });
@@ -23,11 +22,32 @@ test('Controls element provide buttons to toggle the closed and locked states', 
     getByTestId(/control-btn2/i);
 });
 
-test('Buttons text changes to reflect the state the door will be in if clicked', () => {
+test('Buttons text changes to reflect the state the door will be in if clicked [Unlock Gate : Lock Gate]', () => {
 
-    const { getByTestId, queryByText } = render(<Controls />);
-    const lock = queryByText(/Lock Gate/i);
-    fireEvent.click(getByTestId(/control-btn2/i));
-    expect(queryByText(/Unlock Gate/i)).toBeTruthy;
+    const toggleLocked = jest.fn();
+    const { getByTestId } = render(<Controls toggleLocked={toggleLocked} locked={true} closed={true} />);
+    const lockBtn = getByTestId(/control-btn1/i);
 
+    fireEvent.click(lockBtn);
+    expect(toggleLocked).toHaveBeenCalled();
+});
+
+test('[Close] toggle button is not active if gate is locked', () => {
+
+    const toggleClosed = jest.fn();
+    const { getByTestId } = render(<Controls toggleClosed={toggleClosed} locked={true} closed={true} />);
+    const closeBtn = getByTestId(/control-btn2/i);
+
+    fireEvent.click(closeBtn);
+    expect(toggleClosed).not.toHaveBeenCalled();
+});
+
+test('[Lock] toggle button is active if gate is open', () => {
+    
+    const toggleLocked = jest.fn();
+    const { getByTestId } = render(<Controls toggleLocked={toggleLocked} closed={false} locked={false} />);
+    const lockBtn = getByTestId(/control-btn1/i);
+
+    fireEvent.click(lockBtn);
+    expect(toggleLocked).not.toHaveBeenCalled();
 });
