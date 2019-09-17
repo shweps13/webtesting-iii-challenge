@@ -41,3 +41,17 @@ test('Displays "Unlock" if locked prop is false', () => {
     const { getByText } = render(<Display locked={false} />);
     getByText(/unlocked/i);
 });
+
+test('When locked or closed use the red-led class', () => {
+    const { getByText } = render(<Display closed={true} locked={true} />);
+    expect(getByText(/locked/i).classList).toContain('red-led');
+    expect(getByText(/closed/i).classList).toContain('red-led');
+});
+
+test('When unlocked or open use the green-led class', () => {
+    const { getByText } = render(<Display closed={false} locked={false} />);
+    const unlocked = getByText(/unlocked/i);
+    const open = getByText(/open/i);
+    expect(unlocked.classList).toContain('green-led');
+    expect(open.classList).toContain('green-led');
+});
